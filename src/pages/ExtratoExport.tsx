@@ -11,8 +11,8 @@ const PAD_SIDE = 15;
 const PAD_TOP = 12;
 const FOOTER_ZONE = 38;
 const HEADER_ZONE = 28; // mm for repeated header
-const CONTENT_H_FIRST = A4_H - PAD_TOP - FOOTER_ZONE; // first page: no separate header zone (header is part of content)
-const CONTENT_H_REST = A4_H - PAD_TOP - FOOTER_ZONE - HEADER_ZONE; // subsequent pages: header takes space
+const CONTENT_H_FIRST = A4_H - PAD_TOP - FOOTER_ZONE - HEADER_ZONE; // header is on every page
+const CONTENT_H_REST = A4_H - PAD_TOP - FOOTER_ZONE - HEADER_ZONE;
 
 const ExtratoExport = () => {
   const [searchParams] = useSearchParams();
@@ -275,16 +275,16 @@ const ExtratoExport = () => {
       bottom: `${PAD_SIDE}mm`,
       left: `${PAD_SIDE}mm`,
       right: `${PAD_SIDE}mm`,
-      fontSize: "8px",
+      fontSize: "9px",
       color: "#888",
-      lineHeight: "1.45",
+      lineHeight: "1.5",
       borderTop: "1.5px solid #ccc",
       paddingTop: "8px",
       fontFamily: "'Graphik', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     }}>
       <p>Tem alguma dúvida? Mande uma mensagem para nosso time de atendimento pelo chat do app ou ligue 4020 0185 (capitais e regiões metropolitanas) ou 0800 591 2117 (demais localidades). Atendimento 24h.</p>
       <p style={{ marginTop: "4px" }}>Caso a solução fornecida nos canais de atendimento não tenha sido satisfatória, fale com a Ouvidoria em 0800 887 0463 ou pelos meios disponíveis em nubank.com.br/contatos#ouvidoria. Atendimento das 8h às 18h em dias úteis.</p>
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "6px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "12px" }}>
         <span style={{ marginLeft: "25px" }}>{footerDateText}</span>
         <span>{pageNum} de {totalPages}</span>
       </div>
