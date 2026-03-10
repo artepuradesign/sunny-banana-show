@@ -23,10 +23,26 @@ const ExtratoExport = () => {
       .finally(() => setLoading(false));
   }, [contaId, dataInicio, dataFim]);
 
+  const [totalPages, setTotalPages] = useState(1);
+
   const fmt = (v: number) =>
     v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  const handlePrint = () => window.print();
+  const handlePrint = () => {
+    // Calculate total pages based on content height vs A4 page content area
+    const contentEl = document.getElementById("extrato-content");
+    if (contentEl) {
+      const contentHeight = contentEl.scrollHeight;
+      // A4 = 297mm, top margin 10mm, bottom margin 55mm => content area ~232mm ≈ 877px at 96dpi
+      const pageContentHeight = 877;
+      const pages = Math.max(1, Math.ceil(contentHeight / pageContentHeight));
+      setTotalPages(pages);
+      // Let React re-render before printing
+      setTimeout(() => window.print(), 100);
+    } else {
+      window.print();
+    }
+  };
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Carregando extrato...</div>;
