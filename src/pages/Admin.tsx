@@ -828,6 +828,14 @@ function ExtratoPreview({ contaInfo, resumo, movimentacoes, datasOrdenadas, extr
     setSaldoInicial(resumo.saldo_inicial || 0);
   }, [resumo.saldo_inicial]);
 
+  const fmtDoc = (doc: string) => {
+    if (!doc) return "";
+    const d = doc.replace(/\D/g, "");
+    if (d.length === 11) return d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    if (d.length === 14) return d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+    return doc;
+  };
+
   const fmtPeriodo = (d: string) =>
     new Date(d + "T12:00:00").toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" }).toUpperCase();
 
