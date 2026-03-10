@@ -164,6 +164,7 @@ const ExtratoExport = () => {
 
       <div className="flex justify-center py-8 print:py-0 bg-secondary/30 print:bg-white min-h-screen">
         <div
+          id="extrato-content"
           className="bg-white shadow-lg print:shadow-none w-[210mm] min-h-[297mm] px-[15mm] py-[20mm] print:w-full print:min-h-0 print:px-0 print:pt-[5mm] print:pb-0"
           style={pageStyle}
         >
