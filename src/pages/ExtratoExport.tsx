@@ -23,10 +23,26 @@ const ExtratoExport = () => {
       .finally(() => setLoading(false));
   }, [contaId, dataInicio, dataFim]);
 
+  const [totalPages, setTotalPages] = useState(1);
+
   const fmt = (v: number) =>
     v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  const handlePrint = () => window.print();
+  const handlePrint = () => {
+    // Calculate total pages based on content height vs A4 page content area
+    const contentEl = document.getElementById("extrato-content");
+    if (contentEl) {
+      const contentHeight = contentEl.scrollHeight;
+      // A4 = 297mm, top margin 10mm, bottom margin 55mm => content area ~232mm ≈ 877px at 96dpi
+      const pageContentHeight = 877;
+      const pages = Math.max(1, Math.ceil(contentHeight / pageContentHeight));
+      setTotalPages(pages);
+      // Let React re-render before printing
+      setTimeout(() => window.print(), 100);
+    } else {
+      window.print();
+    }
+  };
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Carregando extrato...</div>;
@@ -79,7 +95,7 @@ const ExtratoExport = () => {
         @media print {
           @page {
             size: A4;
-            margin: 10mm 3mm 52mm 3mm;
+            margin: 10mm 15mm 55mm 15mm;
           }
           body {
             margin: 0;
@@ -87,9 +103,9 @@ const ExtratoExport = () => {
           }
           .print-footer {
             position: fixed;
-            bottom: 0;
-            left: 15mm;
-            right: 15mm;
+            bottom: -45mm;
+            left: 0;
+            right: 0;
             padding: 12px 0 0 0;
             font-size: 8.5px;
             color: #888;
@@ -104,7 +120,7 @@ const ExtratoExport = () => {
             margin-top: 8px;
           }
           .print-footer .footer-page-number::after {
-            content: counter(page) " de " counter(pages);
+            content: counter(page) " de ${totalPages}";
           }
         }
         @media not print {
@@ -130,8 +146,8 @@ const ExtratoExport = () => {
       <div className="print-footer hidden print:block">
         <p>Tem alguma dúvida? Mande uma mensagem para nosso time de atendimento pelo chat do app ou ligue 4020 0185 (capitais e regiões metropolitanas) ou 0800 591 2117 (demais localidades). Atendimento 24h.</p>
         <p style={{ marginTop: "4px" }}>Caso a solução fornecida nos canais de atendimento não tenha sido satisfatória, fale com a Ouvidoria em 0800 887 0463 ou pelos meios disponíveis em nubank.com.br/contatos#ouvidoria. Atendimento das 8h às 18h em dias úteis.</p>
-        <div className="footer-date-page" style={{ paddingRight: "20px" }}>
-          <span style={{ marginLeft: "30px" }}>Extrato gerado dia {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })} às {new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
+        <div className="footer-date-page">
+          <span>Extrato gerado dia {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })} às {new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
           <span className="footer-page-number"></span>
         </div>
       </div>
@@ -148,7 +164,8 @@ const ExtratoExport = () => {
 
       <div className="flex justify-center py-8 print:py-0 bg-secondary/30 print:bg-white min-h-screen">
         <div
-          className="bg-white shadow-lg print:shadow-none w-[210mm] min-h-[297mm] px-[15mm] py-[20mm] print:w-full print:min-h-0 print:px-[15mm] print:pt-[12mm] print:pb-[10mm]"
+          id="extrato-content"
+          className="bg-white shadow-lg print:shadow-none w-[210mm] min-h-[297mm] px-[15mm] py-[20mm] print:w-full print:min-h-0 print:px-0 print:pt-[5mm] print:pb-0"
           style={pageStyle}
         >
           {/* ===== HEADER ===== */}
@@ -319,7 +336,7 @@ const ExtratoExport = () => {
             <p style={{ marginTop: "8px" }}>Caso a solução fornecida nos canais de atendimento não tenha sido satisfatória, fale com a Ouvidoria em 0800 887 0463 ou pelos meios disponíveis em nubank.com.br/contatos#ouvidoria. Atendimento das 8h às 18h em dias úteis.</p>
             <div className="flex justify-between" style={{ marginTop: "12px", paddingRight: "20px" }}>
               <span style={{ marginLeft: "30px" }}>Extrato gerado dia {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })} às {new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
-              <span>1 de 1</span>
+              <span>1 de {totalPages}</span>
             </div>
           </div>
         </div>
