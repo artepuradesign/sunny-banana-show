@@ -90,12 +90,12 @@ const ExtratoExport = () => {
     <div style={{ marginBottom: "12px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
         <img src={logoNu} alt="Nu" style={{ height: "28px", width: "auto", marginLeft: "25px" }} />
-        <div style={{ textAlign: "right", fontSize: "12px", lineHeight: "1.6" }}>
+        <div style={{ textAlign: "right", fontSize: "12px", lineHeight: "1.6", color: "#767676" }}>
           <p style={{ fontWeight: 400 }}>{conta.titular}</p>
           <p>
-            <span style={{ fontWeight: 700 }}>{conta.tipo_conta === "PJ" ? "CNPJ" : "CPF"}</span>{"  "}{conta.documento}{"  "}
-            <span style={{ fontWeight: 700 }}>Agência</span>{"  "}{conta.agencia || "0001"}{"  "}
-            <span style={{ fontWeight: 700 }}>Conta</span>
+            <span style={{ fontWeight: 700, color: "#222" }}>{conta.tipo_conta === "PJ" ? "CNPJ" : "CPF"}</span>{"  "}{fmtDoc(conta.documento)}{"  "}
+            <span style={{ fontWeight: 700, color: "#222" }}>Agência</span>{"  "}{conta.agencia || "0001"}{"  "}
+            <span style={{ fontWeight: 700, color: "#222" }}>Conta</span>
           </p>
           <p>{conta.numero_conta}</p>
         </div>
