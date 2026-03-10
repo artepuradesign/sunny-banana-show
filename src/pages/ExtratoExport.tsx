@@ -86,7 +86,7 @@ const ExtratoExport = () => {
     b.push(
       <div key="header">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "40px" }}>
-          <img src={logoNu} alt="Nu" style={{ height: "32px", width: "auto" }} />
+          <img src={logoNu} alt="Nu" style={{ height: "32px", width: "auto", marginLeft: "25px" }} />
           <div style={{ textAlign: "right", fontSize: "13px", lineHeight: "1.8" }}>
             <p style={{ fontWeight: 400 }}>{conta.titular}</p>
             <p>
