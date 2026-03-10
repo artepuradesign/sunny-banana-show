@@ -916,7 +916,7 @@ function ExtratoPreview({ contaInfo, resumo, movimentacoes, datasOrdenadas, extr
         <div className="flex justify-between items-start" style={{ marginBottom: "24px" }}>
           <div style={{ paddingTop: "8px" }}>
             <p style={{ fontSize: "12px", color: "#000", marginBottom: "6px", fontWeight: 700 }}>Saldo final do período</p>
-            <p style={{ fontSize: "22px", fontWeight: 700, color: "#820AD1", lineHeight: "1.2" }}>R$ {formatCurrency(saldoInicial + resumo.total_entradas - resumo.total_saidas + resumo.rendimento_liquido)}</p>
+            <p style={{ fontSize: "22px", fontWeight: 700, color: "#8A05BE", lineHeight: "1.2" }}>R$ {formatCurrency(saldoInicial + resumo.total_entradas - resumo.total_saidas + resumo.rendimento_liquido)}</p>
           </div>
           <table style={{ fontSize: "13px", borderCollapse: "collapse", minWidth: "320px" }}>
             <tbody>

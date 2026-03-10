@@ -284,7 +284,7 @@ const ExtratoExport = () => {
       left: `${PAD_SIDE}mm`,
       right: `${PAD_SIDE}mm`,
       fontSize: "9px",
-      color: "#888",
+      color: "#767676",
       lineHeight: "1.5",
       borderTop: "1.5px solid #ccc",
       paddingTop: "8px",
