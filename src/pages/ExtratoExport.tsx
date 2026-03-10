@@ -202,7 +202,7 @@ const ExtratoExport = () => {
           <p>Não nos responsabilizamos pelo uso indevido ou por alterações das informações originalmente contidas neste documento após envio.</p>
           <p>Asseguramos a autenticidade destas movimentações e das informações aqui citadas.</p>
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: "20px", fontSize: "11.5px", lineHeight: "1.6", color: "#222" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: "20px", fontSize: "11.5px", lineHeight: "1.6", color: "#222", paddingBottom: "16px", borderBottom: "2px solid #ccc" }}>
           <div>
             <p style={{ fontWeight: 700 }}>Nu Financeira S.A. - Sociedade de Credito, Financiamento</p>
             <p style={{ fontWeight: 700 }}>e Investimento</p>
