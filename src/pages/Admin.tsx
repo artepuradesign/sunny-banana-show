@@ -891,12 +891,12 @@ function ExtratoPreview({ contaInfo, resumo, movimentacoes, datasOrdenadas, extr
         {/* HEADER */}
         <div className="flex justify-between items-start mb-12">
           <img src={logoNu} alt="Nu" style={{ height: "32px", width: "auto", marginLeft: "30px" }} />
-          <div className="text-right" style={{ fontSize: "13px", lineHeight: "1.8" }}>
+          <div className="text-right" style={{ fontSize: "13px", lineHeight: "1.8", color: "#767676" }}>
             <p>{contaInfo.titular || "—"}</p>
             <p>
-              <span style={{ fontWeight: 700, color: "#222" }}>{contaInfo.tipo_conta === "PJ" ? "CNPJ" : "CPF"}</span>{"  "}{contaInfo.documento || "—"}{"  "}
-              <span style={{ fontWeight: 700 }}>Agência</span>{"  "}{contaInfo.agencia || "0001"}{"  "}
-              <span style={{ fontWeight: 700 }}>Conta</span>
+              <span style={{ fontWeight: 700, color: "#222" }}>{contaInfo.tipo_conta === "PJ" ? "CNPJ" : "CPF"}</span>{"  "}{fmtDoc(contaInfo.documento) || "—"}{"  "}
+              <span style={{ fontWeight: 700, color: "#222" }}>Agência</span>{"  "}{contaInfo.agencia || "0001"}{"  "}
+              <span style={{ fontWeight: 700, color: "#222" }}>Conta</span>
             </p>
             <p>{contaInfo.numero_conta || "—"}</p>
           </div>
