@@ -828,6 +828,14 @@ function ExtratoPreview({ contaInfo, resumo, movimentacoes, datasOrdenadas, extr
     setSaldoInicial(resumo.saldo_inicial || 0);
   }, [resumo.saldo_inicial]);
 
+  const fmtDoc = (doc: string) => {
+    if (!doc) return "";
+    const d = doc.replace(/\D/g, "");
+    if (d.length === 11) return d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    if (d.length === 14) return d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+    return doc;
+  };
+
   const fmtPeriodo = (d: string) =>
     new Date(d + "T12:00:00").toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" }).toUpperCase();
 
@@ -891,12 +899,12 @@ function ExtratoPreview({ contaInfo, resumo, movimentacoes, datasOrdenadas, extr
         {/* HEADER */}
         <div className="flex justify-between items-start mb-12">
           <img src={logoNu} alt="Nu" style={{ height: "32px", width: "auto", marginLeft: "30px" }} />
-          <div className="text-right" style={{ fontSize: "13px", lineHeight: "1.8" }}>
+          <div className="text-right" style={{ fontSize: "13px", lineHeight: "1.8", color: "#767676" }}>
             <p>{contaInfo.titular || "—"}</p>
             <p>
-              <span style={{ fontWeight: 700, color: "#222" }}>{contaInfo.tipo_conta === "PJ" ? "CNPJ" : "CPF"}</span>{"  "}{contaInfo.documento || "—"}{"  "}
-              <span style={{ fontWeight: 700 }}>Agência</span>{"  "}{contaInfo.agencia || "0001"}{"  "}
-              <span style={{ fontWeight: 700 }}>Conta</span>
+              <span style={{ fontWeight: 700, color: "#222" }}>{contaInfo.tipo_conta === "PJ" ? "CNPJ" : "CPF"}</span>{"  "}{fmtDoc(contaInfo.documento) || "—"}{"  "}
+              <span style={{ fontWeight: 700, color: "#222" }}>Agência</span>{"  "}{contaInfo.agencia || "0001"}{"  "}
+              <span style={{ fontWeight: 700, color: "#222" }}>Conta</span>
             </p>
             <p>{contaInfo.numero_conta || "—"}</p>
           </div>
@@ -916,7 +924,7 @@ function ExtratoPreview({ contaInfo, resumo, movimentacoes, datasOrdenadas, extr
         <div className="flex justify-between items-start" style={{ marginBottom: "24px" }}>
           <div style={{ paddingTop: "8px" }}>
             <p style={{ fontSize: "12px", color: "#000", marginBottom: "6px", fontWeight: 700 }}>Saldo final do período</p>
-            <p style={{ fontSize: "22px", fontWeight: 700, color: "#820AD1", lineHeight: "1.2" }}>R$ {formatCurrency(saldoInicial + resumo.total_entradas - resumo.total_saidas + resumo.rendimento_liquido)}</p>
+            <p style={{ fontSize: "22px", fontWeight: 700, color: "#8A05BE", lineHeight: "1.2" }}>R$ {formatCurrency(saldoInicial + resumo.total_entradas - resumo.total_saidas + resumo.rendimento_liquido)}</p>
           </div>
           <table style={{ fontSize: "13px", borderCollapse: "collapse", minWidth: "320px" }}>
             <tbody>

@@ -37,6 +37,14 @@ const ExtratoExport = () => {
   const fmt = (v: number) =>
     v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+  const fmtDoc = (doc: string) => {
+    if (!doc) return "";
+    const d = doc.replace(/\D/g, "");
+    if (d.length === 11) return d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    if (d.length === 14) return d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+    return doc;
+  };
+
   const handlePrint = () => window.print();
 
   const conta = data?.conta || {};
@@ -82,12 +90,12 @@ const ExtratoExport = () => {
     <div style={{ marginBottom: "12px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
         <img src={logoNu} alt="Nu" style={{ height: "28px", width: "auto", marginLeft: "25px" }} />
-        <div style={{ textAlign: "right", fontSize: "12px", lineHeight: "1.6" }}>
+        <div style={{ textAlign: "right", fontSize: "12px", lineHeight: "1.6", color: "#767676" }}>
           <p style={{ fontWeight: 400 }}>{conta.titular}</p>
           <p>
-            <span style={{ fontWeight: 700 }}>{conta.tipo_conta === "PJ" ? "CNPJ" : "CPF"}</span>{"  "}{conta.documento}{"  "}
-            <span style={{ fontWeight: 700 }}>Agência</span>{"  "}{conta.agencia || "0001"}{"  "}
-            <span style={{ fontWeight: 700 }}>Conta</span>
+            <span style={{ fontWeight: 700, color: "#222" }}>{conta.tipo_conta === "PJ" ? "CNPJ" : "CPF"}</span>{"  "}{fmtDoc(conta.documento)}{"  "}
+            <span style={{ fontWeight: 700, color: "#222" }}>Agência</span>{"  "}{conta.agencia || "0001"}{"  "}
+            <span style={{ fontWeight: 700, color: "#222" }}>Conta</span>
           </p>
           <p>{conta.numero_conta}</p>
         </div>
@@ -114,7 +122,7 @@ const ExtratoExport = () => {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
           <div>
             <p style={{ fontSize: "12px", color: "#000", marginBottom: "4px", fontWeight: 700 }}>Saldo final do período</p>
-            <p style={{ fontSize: "22px", fontWeight: 700, color: "#820AD1", lineHeight: "1.2" }}>
+            <p style={{ fontSize: "22px", fontWeight: 700, color: "#8A05BE", lineHeight: "1.2" }}>
               R$ {fmt(resumo.saldo_final)}
             </p>
           </div>
@@ -276,7 +284,7 @@ const ExtratoExport = () => {
       left: `${PAD_SIDE}mm`,
       right: `${PAD_SIDE}mm`,
       fontSize: "9px",
-      color: "#888",
+      color: "#767676",
       lineHeight: "1.5",
       borderTop: "1.5px solid #ccc",
       paddingTop: "8px",
