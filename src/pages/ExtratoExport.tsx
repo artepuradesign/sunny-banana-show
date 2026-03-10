@@ -78,17 +78,16 @@ const ExtratoExport = () => {
       <style>{`
         @media print {
           @page {
-            margin: 3mm;
             size: A4;
+            margin: 10mm 3mm 52mm 3mm;
           }
           body {
             margin: 0;
             padding: 0;
-            counter-reset: page 0;
           }
           .print-footer {
             position: fixed;
-            bottom: 8mm;
+            bottom: 0;
             left: 15mm;
             right: 15mm;
             padding: 12px 0 0 0;
@@ -98,7 +97,6 @@ const ExtratoExport = () => {
             border-top: 2px solid #ccc;
             font-family: 'Graphik', sans-serif;
             font-weight: 400;
-            counter-increment: page;
           }
           .print-footer .footer-date-page {
             display: flex;
@@ -150,7 +148,7 @@ const ExtratoExport = () => {
 
       <div className="flex justify-center py-8 print:py-0 bg-secondary/30 print:bg-white min-h-screen">
         <div
-          className="bg-white shadow-lg print:shadow-none w-[210mm] min-h-[297mm] px-[15mm] py-[20mm] print:w-full print:min-h-0 print:px-[15mm] print:pt-[12mm] print:pb-[50mm]"
+          className="bg-white shadow-lg print:shadow-none w-[210mm] min-h-[297mm] px-[15mm] py-[20mm] print:w-full print:min-h-0 print:px-[15mm] print:pt-[12mm] print:pb-[10mm]"
           style={pageStyle}
         >
           {/* ===== HEADER ===== */}
