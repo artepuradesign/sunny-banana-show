@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Printer } from "lucide-react";
@@ -23,26 +23,10 @@ const ExtratoExport = () => {
       .finally(() => setLoading(false));
   }, [contaId, dataInicio, dataFim]);
 
-  const [totalPages, setTotalPages] = useState(1);
-
   const fmt = (v: number) =>
     v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  const handlePrint = () => {
-    // Calculate total pages based on content height vs A4 page content area
-    const contentEl = document.getElementById("extrato-content");
-    if (contentEl) {
-      const contentHeight = contentEl.scrollHeight;
-      // A4 = 297mm, top margin 10mm, bottom margin 55mm => content area ~232mm ≈ 877px at 96dpi
-      const pageContentHeight = 877;
-      const pages = Math.max(1, Math.ceil(contentHeight / pageContentHeight));
-      setTotalPages(pages);
-      // Let React re-render before printing
-      setTimeout(() => window.print(), 100);
-    } else {
-      window.print();
-    }
-  };
+  const handlePrint = () => window.print();
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Carregando extrato...</div>;
@@ -67,7 +51,6 @@ const ExtratoExport = () => {
     return `${day} ${months[dt.getMonth()]} ${dt.getFullYear()}`;
   };
 
-  // Compute saldo do dia for each date
   const saldoPorDia: Record<string, number> = {};
   {
     let saldoAcumulado = resumo.saldo_inicial || 0;
@@ -81,6 +64,8 @@ const ExtratoExport = () => {
     }
   }
 
+  const footerDateText = `Extrato gerado dia ${new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })} às ${new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`;
+
   const pageStyle: React.CSSProperties = {
     fontFamily: "'Graphik', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     fontWeight: 400,
@@ -89,70 +74,70 @@ const ExtratoExport = () => {
     color: "#222",
   };
 
+  const footerContent = (
+    <>
+      <p>Tem alguma dúvida? Mande uma mensagem para nosso time de atendimento pelo chat do app ou ligue 4020 0185 (capitais e regiões metropolitanas) ou 0800 591 2117 (demais localidades). Atendimento 24h.</p>
+      <p style={{ marginTop: "4px" }}>Caso a solução fornecida nos canais de atendimento não tenha sido satisfatória, fale com a Ouvidoria em 0800 887 0463 ou pelos meios disponíveis em nubank.com.br/contatos#ouvidoria. Atendimento das 8h às 18h em dias úteis.</p>
+    </>
+  );
+
   return (
     <>
       <style>{`
         @media print {
           @page {
             size: A4;
-            margin: 10mm 15mm 55mm 15mm;
+            margin: 15mm;
+            margin-bottom: 45mm;
           }
-          body {
-            margin: 0;
-            padding: 0;
-          }
-          .print-footer {
+          body { margin: 0; padding: 0; }
+
+          .extrato-print-footer {
             position: fixed;
-            bottom: -45mm;
+            bottom: -30mm;
             left: 0;
             right: 0;
-            padding: 12px 0 0 0;
-            font-size: 8.5px;
+            font-size: 8px;
             color: #888;
-            line-height: 1.4;
-            border-top: 2px solid #ccc;
-            font-family: 'Graphik', sans-serif;
-            font-weight: 400;
+            line-height: 1.45;
+            border-top: 1.5px solid #ccc;
+            padding-top: 8px;
+            font-family: 'Graphik', 'Helvetica Neue', Helvetica, Arial, sans-serif;
           }
-          .print-footer .footer-date-page {
+          .extrato-print-footer .efp-row {
             display: flex;
             justify-content: space-between;
-            margin-top: 8px;
+            margin-top: 6px;
           }
-          .print-footer .footer-page-number::after {
-            content: counter(page) " de ${totalPages}";
+          .extrato-print-footer .efp-page::after {
+            content: counter(page);
           }
-        }
-        @media not print {
-          .print-footer-screen {
-            margin-top: 32px;
-            border-top: 2px solid #ccc;
-            padding-top: 16px;
-            font-size: 9px;
-            color: #888;
-            line-height: 1.5;
-            font-family: 'Graphik', sans-serif;
-            font-weight: 400;
-          }
-        }
-        @media print {
-          .print-footer-screen {
-            display: none !important;
+
+          .extrato-screen-footer { display: none !important; }
+          .extrato-toolbar { display: none !important; }
+          .extrato-wrapper { padding: 0 !important; background: white !important; }
+          .extrato-page { 
+            box-shadow: none !important; 
+            padding: 0 !important;
+            width: 100% !important;
+            min-height: auto !important;
           }
         }
       `}</style>
 
-      {/* Print-only fixed footer on every page */}
-      <div className="print-footer hidden print:block">
-        <p>Tem alguma dúvida? Mande uma mensagem para nosso time de atendimento pelo chat do app ou ligue 4020 0185 (capitais e regiões metropolitanas) ou 0800 591 2117 (demais localidades). Atendimento 24h.</p>
-        <p style={{ marginTop: "4px" }}>Caso a solução fornecida nos canais de atendimento não tenha sido satisfatória, fale com a Ouvidoria em 0800 887 0463 ou pelos meios disponíveis em nubank.com.br/contatos#ouvidoria. Atendimento das 8h às 18h em dias úteis.</p>
-        <div className="footer-date-page">
-          <span>Extrato gerado dia {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })} às {new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
-          <span className="footer-page-number"></span>
+      {/* Fixed footer for print - appears on every printed page */}
+      <div className="extrato-print-footer" style={{ display: "none" }}>
+        {footerContent}
+        <div className="efp-row">
+          <span>{footerDateText}</span>
+          <span className="efp-page"></span>
         </div>
       </div>
+      {/* Make it visible only in print */}
+      <style>{`.extrato-print-footer { display: none; } @media print { .extrato-print-footer { display: block !important; } }`}</style>
 
-      <div className="print:hidden bg-secondary/30 border-b border-border px-6 py-4 flex items-center gap-4 sticky top-0 z-50">
+      {/* Toolbar */}
+      <div className="extrato-toolbar bg-secondary/30 border-b border-border px-6 py-4 flex items-center gap-4 sticky top-0 z-50">
         <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
           <ArrowLeft className="h-5 w-5" />
         </Button>
@@ -162,19 +147,17 @@ const ExtratoExport = () => {
         </Button>
       </div>
 
-      <div className="flex justify-center py-8 print:py-0 bg-secondary/30 print:bg-white min-h-screen">
-        <div
-          id="extrato-content"
-          className="bg-white shadow-lg print:shadow-none w-[210mm] min-h-[297mm] px-[15mm] py-[20mm] print:w-full print:min-h-0 print:px-0 print:pt-[5mm] print:pb-0"
-          style={pageStyle}
-        >
-          {/* ===== HEADER ===== */}
-          <div className="flex justify-between items-start mb-12">
-            <img src={logoNu} alt="Nu" style={{ height: "32px", width: "auto", marginLeft: "30px" }} />
-            <div className="text-right" style={{ fontSize: "13px", lineHeight: "1.8" }}>
+      {/* Content */}
+      <div className="extrato-wrapper flex justify-center py-8 bg-secondary/30 min-h-screen">
+        <div className="extrato-page bg-white shadow-lg w-[210mm] min-h-[297mm] px-[15mm] py-[20mm]" style={pageStyle}>
+          
+          {/* HEADER */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "40px" }}>
+            <img src={logoNu} alt="Nu" style={{ height: "32px", width: "auto" }} />
+            <div style={{ textAlign: "right", fontSize: "13px", lineHeight: "1.8" }}>
               <p style={{ fontWeight: 400 }}>{conta.titular}</p>
               <p>
-                <span style={{ fontWeight: 700, color: "#222" }}>{conta.tipo_conta === "PJ" ? "CNPJ" : "CPF"}</span>{"  "}{conta.documento}{"  "}
+                <span style={{ fontWeight: 700 }}>{conta.tipo_conta === "PJ" ? "CNPJ" : "CPF"}</span>{"  "}{conta.documento}{"  "}
                 <span style={{ fontWeight: 700 }}>Agência</span>{"  "}{conta.agencia || "0001"}{"  "}
                 <span style={{ fontWeight: 700 }}>Conta</span>
               </p>
@@ -182,9 +165,9 @@ const ExtratoExport = () => {
             </div>
           </div>
 
-          {/* ===== PERÍODO ===== */}
+          {/* PERÍODO */}
           <div style={{ borderBottom: "2px solid #ccc", paddingBottom: "8px", marginBottom: "24px" }}>
-            <div className="flex justify-between items-baseline">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
               <span style={{ fontWeight: 700, fontSize: "13px" }}>
                 {fmtPeriodo(dataInicio)} a {fmtPeriodo(dataFim)}
               </span>
@@ -192,8 +175,8 @@ const ExtratoExport = () => {
             </div>
           </div>
 
-          {/* ===== RESUMO ===== */}
-          <div className="flex justify-between items-start" style={{ marginBottom: "24px" }}>
+          {/* RESUMO */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "24px" }}>
             <div style={{ paddingTop: "8px" }}>
               <p style={{ fontSize: "12px", color: "#000", marginBottom: "6px", fontWeight: 700 }}>Saldo final do período</p>
               <p style={{ fontSize: "22px", fontWeight: 700, color: "#820AD1", lineHeight: "1.2" }}>
@@ -226,7 +209,7 @@ const ExtratoExport = () => {
             </table>
           </div>
 
-          {/* ===== MOVIMENTAÇÕES ===== */}
+          {/* MOVIMENTAÇÕES */}
           <div style={{ borderBottom: "2px solid #ccc", marginBottom: "4px" }}></div>
           <div style={{ marginBottom: "16px" }}>
             <span style={{ fontWeight: 700, fontSize: "13px" }}>Movimentações</span>
@@ -245,10 +228,9 @@ const ExtratoExport = () => {
             const dateShownInEntradas = entradas.length > 0;
 
             return (
-              <div key={dia} style={{ marginBottom: "0", pageBreakInside: "avoid" }}>
+              <div key={dia} style={{ pageBreakInside: "avoid" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "12px" }}>
                   <tbody>
-                    {/* Entradas */}
                     {entradas.length > 0 && (
                       <>
                         <tr>
@@ -260,9 +242,7 @@ const ExtratoExport = () => {
                         {entradas.map((t: any, i: number) => (
                           <tr key={t.id || i}>
                             <td style={{ padding: "8px 16px 8px 0" }}></td>
-                            <td style={{ padding: "8px 0", verticalAlign: "top", width: "200px" }}>
-                              {t.descricao}
-                            </td>
+                            <td style={{ padding: "8px 0", verticalAlign: "top", width: "200px" }}>{t.descricao}</td>
                             <td style={{ padding: "8px 8px", verticalAlign: "top", color: "#555", fontSize: "11.5px", lineHeight: "2.5" }}>
                               {t.beneficiario_nome} - {t.beneficiario_documento} - {t.beneficiario_banco}{t.beneficiario_banco_codigo ? ` (${t.beneficiario_banco_codigo})` : ""} Agência: {t.beneficiario_agencia} Conta: {t.beneficiario_conta}
                             </td>
@@ -272,7 +252,6 @@ const ExtratoExport = () => {
                       </>
                     )}
 
-                    {/* Saídas */}
                     {saidas.length > 0 && (
                       <>
                         <tr>
@@ -284,9 +263,7 @@ const ExtratoExport = () => {
                         {saidas.map((t: any, i: number) => (
                           <tr key={t.id || i}>
                             <td style={{ padding: "8px 16px 8px 0" }}></td>
-                            <td style={{ padding: "8px 0", verticalAlign: "top", width: "200px" }}>
-                              {t.descricao}
-                            </td>
+                            <td style={{ padding: "8px 0", verticalAlign: "top", width: "200px" }}>{t.descricao}</td>
                             <td style={{ padding: "8px 8px", verticalAlign: "top", color: "#555", fontSize: "11.5px", lineHeight: "2.5" }}>
                               {t.beneficiario_nome} - {t.beneficiario_documento} - {t.beneficiario_banco}{t.beneficiario_banco_codigo ? ` (${t.beneficiario_banco_codigo})` : ""} Agência: {t.beneficiario_agencia} Conta: {t.beneficiario_conta}
                             </td>
@@ -296,7 +273,6 @@ const ExtratoExport = () => {
                       </>
                     )}
 
-                    {/* Saldo do dia */}
                     <tr style={{ borderBottom: "2px solid #ccc" }}>
                       <td style={{ padding: "14px 16px 14px 0" }}></td>
                       <td style={{ fontWeight: 700, padding: "14px 0" }}>Saldo do dia</td>
@@ -309,15 +285,14 @@ const ExtratoExport = () => {
             );
           })}
 
-          {/* ===== ÚLTIMA PÁGINA: Disclaimer + Empresas ===== */}
+          {/* DISCLAIMER + EMPRESAS */}
           <div style={{ marginTop: "40px", pageBreakInside: "avoid" }}>
             <div style={{ borderTop: "1px solid #ddd", paddingTop: "16px", fontSize: "10px", color: "#555", lineHeight: "1.6" }}>
               <p>O saldo líquido corresponde ao total de depósitos e rendimentos em conta, não considerando movimentações feitas após a data mencionada.</p>
               <p>Não nos responsabilizamos pelo uso indevido ou por alterações das informações originalmente contidas neste documento após envio.</p>
               <p>Asseguramos a autenticidade destas movimentações e das informações aqui citadas.</p>
             </div>
-
-            <div className="flex justify-between items-start" style={{ marginTop: "20px", fontSize: "11.5px", lineHeight: "1.6", color: "#222" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: "20px", fontSize: "11.5px", lineHeight: "1.6", color: "#222" }}>
               <div>
                 <p style={{ fontWeight: 700 }}>Nu Financeira S.A. - Sociedade de Credito, Financiamento</p>
                 <p style={{ fontWeight: 700 }}>e Investimento</p>
@@ -330,13 +305,12 @@ const ExtratoExport = () => {
             </div>
           </div>
 
-          {/* Screen-only footer */}
-          <div className="print-footer-screen" style={{ marginTop: "32px" }}>
-            <p>Tem alguma dúvida? Mande uma mensagem para nosso time de atendimento pelo chat do app ou ligue 4020 0185 (capitais e regiões metropolitanas) ou 0800 591 2117 (demais localidades). Atendimento 24h.</p>
-            <p style={{ marginTop: "8px" }}>Caso a solução fornecida nos canais de atendimento não tenha sido satisfatória, fale com a Ouvidoria em 0800 887 0463 ou pelos meios disponíveis em nubank.com.br/contatos#ouvidoria. Atendimento das 8h às 18h em dias úteis.</p>
-            <div className="flex justify-between" style={{ marginTop: "12px", paddingRight: "20px" }}>
-              <span style={{ marginLeft: "30px" }}>Extrato gerado dia {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })} às {new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
-              <span>1 de {totalPages}</span>
+          {/* Screen-only footer (visible in preview, hidden in print) */}
+          <div className="extrato-screen-footer" style={{ marginTop: "32px", borderTop: "2px solid #ccc", paddingTop: "16px", fontSize: "9px", color: "#888", lineHeight: "1.5" }}>
+            {footerContent}
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: "12px" }}>
+              <span>{footerDateText}</span>
+              <span>1 de 1</span>
             </div>
           </div>
         </div>
