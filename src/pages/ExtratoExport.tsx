@@ -73,7 +73,7 @@ const ExtratoExport = () => {
     fontFamily: "'Graphik', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     fontWeight: 400,
     fontSize: "12px",
-    lineHeight: "1.8",
+    lineHeight: "1.5",
     color: "#222",
   };
 
