@@ -122,7 +122,7 @@ const ExtratoExport = () => {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
           <div>
             <p style={{ fontSize: "12px", color: "#000", marginBottom: "4px", fontWeight: 700 }}>Saldo final do período</p>
-            <p style={{ fontSize: "22px", fontWeight: 700, color: "#820AD1", lineHeight: "1.2" }}>
+            <p style={{ fontSize: "22px", fontWeight: 700, color: "#8A05BE", lineHeight: "1.2" }}>
               R$ {fmt(resumo.saldo_final)}
             </p>
           </div>
