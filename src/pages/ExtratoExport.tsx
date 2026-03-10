@@ -11,8 +11,8 @@ const PAD_SIDE = 15;
 const PAD_TOP = 12;
 const FOOTER_ZONE = 38;
 const HEADER_ZONE = 28; // mm for repeated header
-const CONTENT_H_FIRST = A4_H - PAD_TOP - FOOTER_ZONE; // first page: no separate header zone (header is part of content)
-const CONTENT_H_REST = A4_H - PAD_TOP - FOOTER_ZONE - HEADER_ZONE; // subsequent pages: header takes space
+const CONTENT_H_FIRST = A4_H - PAD_TOP - FOOTER_ZONE - HEADER_ZONE; // header is on every page
+const CONTENT_H_REST = A4_H - PAD_TOP - FOOTER_ZONE - HEADER_ZONE;
 
 const ExtratoExport = () => {
   const [searchParams] = useSearchParams();
