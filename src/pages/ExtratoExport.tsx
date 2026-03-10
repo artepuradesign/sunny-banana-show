@@ -73,7 +73,7 @@ const ExtratoExport = () => {
     fontFamily: "'Graphik', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     fontWeight: 400,
     fontSize: "12px",
-    lineHeight: "1.5",
+    lineHeight: "1.35",
     color: "#222",
   };
 
@@ -86,7 +86,7 @@ const ExtratoExport = () => {
     b.push(
       <div key="header">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "40px" }}>
-          <img src={logoNu} alt="Nu" style={{ height: "32px", width: "auto" }} />
+          <img src={logoNu} alt="Nu" style={{ height: "32px", width: "auto", marginLeft: "25px" }} />
           <div style={{ textAlign: "right", fontSize: "13px", lineHeight: "1.8" }}>
             <p style={{ fontWeight: 400 }}>{conta.titular}</p>
             <p>
@@ -105,8 +105,8 @@ const ExtratoExport = () => {
             <span style={{ fontSize: "13px", color: "#666" }}>VALORES EM R$</span>
           </div>
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "24px" }}>
-          <div style={{ paddingTop: "8px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
+          <div>
             <p style={{ fontSize: "12px", color: "#000", marginBottom: "6px", fontWeight: 700 }}>Saldo final do período</p>
             <p style={{ fontSize: "22px", fontWeight: 700, color: "#820AD1", lineHeight: "1.2" }}>
               R$ {fmt(resumo.saldo_final)}
@@ -279,7 +279,7 @@ const ExtratoExport = () => {
       <p>Tem alguma dúvida? Mande uma mensagem para nosso time de atendimento pelo chat do app ou ligue 4020 0185 (capitais e regiões metropolitanas) ou 0800 591 2117 (demais localidades). Atendimento 24h.</p>
       <p style={{ marginTop: "4px" }}>Caso a solução fornecida nos canais de atendimento não tenha sido satisfatória, fale com a Ouvidoria em 0800 887 0463 ou pelos meios disponíveis em nubank.com.br/contatos#ouvidoria. Atendimento das 8h às 18h em dias úteis.</p>
       <div style={{ display: "flex", justifyContent: "space-between", marginTop: "6px" }}>
-        <span>{footerDateText}</span>
+        <span style={{ marginLeft: "25px" }}>{footerDateText}</span>
         <span>{pageNum} de {totalPages}</span>
       </div>
     </div>
