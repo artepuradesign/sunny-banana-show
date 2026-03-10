@@ -79,7 +79,7 @@ const ExtratoExport = () => {
         @media print {
           @page {
             size: A4;
-            margin: 10mm 3mm 52mm 3mm;
+            margin: 10mm 15mm 55mm 15mm;
           }
           body {
             margin: 0;
@@ -87,9 +87,9 @@ const ExtratoExport = () => {
           }
           .print-footer {
             position: fixed;
-            bottom: 0;
-            left: 15mm;
-            right: 15mm;
+            bottom: -45mm;
+            left: 0;
+            right: 0;
             padding: 12px 0 0 0;
             font-size: 8.5px;
             color: #888;
@@ -104,7 +104,7 @@ const ExtratoExport = () => {
             margin-top: 8px;
           }
           .print-footer .footer-page-number::after {
-            content: counter(page) " de " counter(pages);
+            content: counter(page);
           }
         }
         @media not print {
@@ -130,8 +130,8 @@ const ExtratoExport = () => {
       <div className="print-footer hidden print:block">
         <p>Tem alguma dúvida? Mande uma mensagem para nosso time de atendimento pelo chat do app ou ligue 4020 0185 (capitais e regiões metropolitanas) ou 0800 591 2117 (demais localidades). Atendimento 24h.</p>
         <p style={{ marginTop: "4px" }}>Caso a solução fornecida nos canais de atendimento não tenha sido satisfatória, fale com a Ouvidoria em 0800 887 0463 ou pelos meios disponíveis em nubank.com.br/contatos#ouvidoria. Atendimento das 8h às 18h em dias úteis.</p>
-        <div className="footer-date-page" style={{ paddingRight: "20px" }}>
-          <span style={{ marginLeft: "30px" }}>Extrato gerado dia {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })} às {new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
+        <div className="footer-date-page">
+          <span>Extrato gerado dia {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })} às {new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
           <span className="footer-page-number"></span>
         </div>
       </div>
